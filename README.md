@@ -1,5 +1,7 @@
 # Backwork .NET SDK
 
+[![CI](https://github.com/tylergibbs1/backwork-dotnet/actions/workflows/ci.yml/badge.svg)](https://github.com/tylergibbs1/backwork-dotnet/actions/workflows/ci.yml)
+
 Official .NET client for the [Backwork API](https://backworkhealth.com): Medicare coverage policies, medical code intelligence, prior authorization checks, claim validation, compliance review, and drug formulary evidence.
 
 The SDK targets .NET Standard 2.0 and is compatible with .NET Framework 4.6.1+, .NET Core 2.0+, and modern .NET releases.
@@ -10,7 +12,16 @@ The SDK targets .NET Standard 2.0 and is compatible with .NET Framework 4.6.1+, 
 dotnet add package Backwork.SDK --version 2.0.0
 ```
 
-## Quick Start
+If NuGet.org doesn't list `Backwork.SDK` yet, reference the project from a clone instead:
+
+```bash
+git clone https://github.com/tylergibbs1/backwork-dotnet.git
+dotnet add reference backwork-dotnet/src/Backwork.SDK/Backwork.SDK.csproj
+```
+
+Get an API key from the [Backwork dashboard](https://backworkhealth.com/dashboard).
+
+## Quick start
 
 ```csharp
 using Backwork.SDK;
@@ -34,11 +45,9 @@ var priorAuth = await client.CheckPriorAuthAsync(
 Console.WriteLine(priorAuth.Data?.PaRequired);
 ```
 
-Get an API key from the [Backwork dashboard](https://backworkhealth.com/dashboard).
+## Core workflows
 
-## Core Workflows
-
-### Code Lookup
+### Code lookup
 
 ```csharp
 var result = await client.LookupCodeAsync(
@@ -50,7 +59,7 @@ var result = await client.LookupCodeAsync(
 );
 ```
 
-### Policy Search and Retrieval
+### Policy search and retrieval
 
 ```csharp
 var policies = await client.ListPoliciesAsync(
@@ -67,7 +76,7 @@ var policy = await client.GetPolicyAsync(
 );
 ```
 
-### Prior Authorization and Claim Validation
+### Prior authorization and claim validation
 
 ```csharp
 var priorAuth = await client.CheckPriorAuthAsync(
@@ -108,7 +117,7 @@ var changes = await client.ListUnreviewedChangesAsync(limit: 10);
 var stats = await client.GetComplianceStatsAsync();
 ```
 
-### Drug Formulary Evidence
+### Drug formulary evidence
 
 ```csharp
 var formulary = await client.SearchDrugFormularyEvidenceAsync(
@@ -118,7 +127,7 @@ var formulary = await client.SearchDrugFormularyEvidenceAsync(
 );
 ```
 
-## Error Handling
+## Error handling
 
 ```csharp
 using Backwork.SDK;
@@ -145,14 +154,16 @@ catch (BackworkException ex)
 }
 ```
 
-## Dependency Injection
+## Dependency injection
 
 ```csharp
 services.AddSingleton<BackworkClient>(_ =>
     new BackworkClient(configuration["Backwork:ApiKey"]));
 ```
 
-## Configuration and Disposal
+## Configuration and disposal
+
+The second constructor argument overrides the base URL (default shown):
 
 ```csharp
 using var client = new BackworkClient(
@@ -189,4 +200,4 @@ The SDK publishes to NuGet.org as `Backwork.SDK` using NuGet Trusted Publishing.
 
 ## License
 
-MIT
+MIT (declared as the package license in `Backwork.SDK.csproj`).
